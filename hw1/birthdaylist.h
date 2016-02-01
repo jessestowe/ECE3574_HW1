@@ -1,29 +1,27 @@
 #ifndef BIRTHDAYLIST_H
 #define BIRTHDAYLIST_H
 
-#include <QString>
-#include <QDate>
 #include <QList>
-#include <QStringList>
-#include <QTextStream>
+#include <QDate>
+#include <QString>
+#include <QFile>
+#include "birthday.h"
 
 class BirthdayList
 {
 public:
     BirthdayList();
-    ~BirthdayList();
-    void addBirthday(QString name, QDate date);
-    QDate getBirthday(QString name);
-    QString getBirthday(QDate date);
-    void delBirthday(QString name);
-    void delBirthday(QDate date);
-    void update();
-    void printBirthdays(QTextStream& output);
-
+    void addBirthday(Birthday newBDay);
+    void removeBirthday(Birthday bDay);
+    QList<Birthday*> findInRange(QDate startDate, int numDays);
+    QList<Birthday*> searchNames(QString subString);
+    Birthday* findByName(QString name);
+    void refreshBirthdays();
+    void readFromFile(QFile input);
+    void dumpToFile(QFile output);
 private:
-    int findBirthday(QString name);
-    QStringList birthdayNames;
-    QList<QDate> birthdayDates;
+    QList<Birthday> birthdays;
+
 };
 
 #endif // BIRTHDAYLIST_H

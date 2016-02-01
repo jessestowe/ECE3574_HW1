@@ -1,32 +1,32 @@
 #include "birthday.h"
 
-Birthday::Birthday(QString name, QDate date)
+Birthday::Birthday(QString newName, QDate newDate)
 {
-    this->name = name;
-    this->date = date;
+    name = newName;
+    date = newDate;
 }
 
-QString Birthday::getName()
+QString Birthday::getName() const
 {
-    return this->name;
+    return name;
 }
 
-QDate Birthday::getDate()
+QDate Birthday::getDate() const
 {
-    return this->date;
+    return date;
 }
 
-void setName(QString newName)
+void Birthday::setName(QString newName)
 {
-    this->name = newName;
+    name = newName;
 }
 
-void setDate(QString newDate)
+void Birthday::setDate(QDate newDate)
 {
-    this->date = newDate;
+    date = newDate;
 }
 
 bool Birthday::operator ==(const Birthday& b) const
 {
-    return this->name == b->name && this->date == b->date;
+    return this->name == b.getName() && this->date == b.getDate();
 }

@@ -7,9 +7,9 @@
 class Birthday
 {
 public:
-    Birthday(QString name, QDate date);
-    QString getName();
-    QDate getDate();
+    Birthday(QString newName, QDate newDate);
+    QString getName() const;
+    QDate getDate() const;
     void setName(QString newName);
     void setDate(QDate newDate);
     bool operator==(const Birthday& b) const;

@@ -6,6 +6,7 @@
 #include <QTextStream>
 #include <QList>
 #include "birthday.h"
+#include "birthdaylist.h"
 
 #define DATAFILE "birthdays.dat"
 
@@ -25,13 +26,6 @@ int main(int argc, char *argv[])
 
     //read birthdays from file and save in string list
     BirthdayList birthdays;
-    while(!dataFile.atEnd()) {
-        QStringList split
-        dataFile.readLine();
-        input.split(" ");
-
-        birthdays.addBirthday();
-    }
 
     // print out all birthdays
 //    for (int i = 0; i < birthdays.size(); ++i) {
