@@ -9,3 +9,6 @@ INCLUDEPATH += .
 # Input
 HEADERS += birthday.h birthdaylist.h
 SOURCES += birthday.cpp birthdaylist.cpp main.cpp
+
+# allow nullptr
+QMAKE_CXXFLAGS += -std=c++0x

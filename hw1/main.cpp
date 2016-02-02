@@ -25,7 +25,10 @@ int main(int argc, char *argv[])
     }
 
     //read birthdays from file and save in string list
-    BirthdayList birthdays;
+
+
+    //check for and handle command line args
+
 
     // print out all birthdays
 //    for (int i = 0; i < birthdays.size(); ++i) {

@@ -1,5 +1,10 @@
 #include "birthday.h"
 
+Birthday::Birthday()
+{
+
+}
+
 Birthday::Birthday(QString newName, QDate newDate)
 {
     name = newName;
@@ -28,5 +33,5 @@ void Birthday::setDate(QDate newDate)
 
 bool Birthday::operator ==(const Birthday& b) const
 {
-    return this->name == b.getName() && this->date == b.getDate();
+    return (this->name == b.name) && (this->date == b.date);
 }

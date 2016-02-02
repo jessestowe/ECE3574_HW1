@@ -7,6 +7,7 @@
 class Birthday
 {
 public:
+    Birthday();
     Birthday(QString newName, QDate newDate);
     QString getName() const;
     QDate getDate() const;

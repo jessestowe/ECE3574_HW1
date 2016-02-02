@@ -7,7 +7,14 @@ BirthdayList::BirthdayList()
 
 void BirthdayList::addBirthday(Birthday newBDay)
 {
-    birthdays.append(newBDay);
+    Birthday* temp;
+    temp = this->findByName(newBDay.getName());
+    if(temp == nullptr) {
+        birthdays.append(newBDay);
+    }
+    else {
+        temp->setDate(newBDay.getDate());
+    }
 }
 
 void BirthdayList::removeBirthday(Birthday bDay)
@@ -45,5 +52,15 @@ Birthday* BirthdayList::findByName(QString name)
             return &birthdays[i];
         }
     }
-    return NULL;
+    return nullptr;
+}
+
+void BirthdayList::refreshBirthdays()
+{
+    QDate current = QDate::currentDate();
+    for(int i = 0; i < birthdays.size(); ++i) {
+        if(birthdays[i].getDate() < current) {
+            birthdays[i].setDate(birthdays[i].getDate().addYears(1));
+        }
+    }
 }
