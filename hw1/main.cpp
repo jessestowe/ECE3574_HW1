@@ -9,6 +9,9 @@
 #include "birthdaylist.h"
 
 #define DATAFILE "birthdays.dat"
+#define DATEFORMAT Qt::ISODate      //date format for QDates
+
+void printBirthdays(QTextStream& out, QList<Birthday*> birthdayList);
 
 int main(int argc, char *argv[])
 {
@@ -25,10 +28,40 @@ int main(int argc, char *argv[])
     }
 
     //read birthdays from file and save in string list
-
+    BirthdayList birthdays;
+    QStringList line;
+    while (!dataFile.atEnd())
+    {
+       line = QString(dataFile.readLine()).split(" ");
+       birthdays.addBirthday(Birthday(line[0], QDate::fromString(line[1], DATEFORMAT)));
+    }
 
     //check for and handle command line args
+    if(argc > 1) {
+        if(strcmp(argv[1], "-a") == 0) {           //add birthday specified
+            birthdays.addBirthday(
+                Birthday(QString(argv[3]).remove("\""), QDate::fromString(argv[2], DATEFORMAT))
+            );
+        }
+        else if(strcmp(argv[1], "-n") == 0) {      //list birthdays coming up in n days
+            printBirthdays(qtCout, birthdays.findInRange(QDate::currentDate(), atoi(argv[2])));
+        }
+        else if(strcmp(argv[1], "-d") == 0) {      //delete birthdays
 
+        }
+        else if(strcmp(argv[1], "-m") == 0) {      //birthdays after specified birthday and date range
+
+        }
+        else if(strcmp(argv[1], "-u") == 0) {      //update case
+
+        }
+        else {                                      //namespec case
+
+        }
+    }
+    else {                                          //no command line args given, print default behaviour
+
+    }
 
     // print out all birthdays
 //    for (int i = 0; i < birthdays.size(); ++i) {
@@ -39,6 +72,11 @@ int main(int argc, char *argv[])
 
     //return a.exec();
     return EXIT_SUCCESS;
+
+}
+
+void printBirthdays(QTextStream& out, QList<Birthday*> birthdayList)
+{
 
 }
 

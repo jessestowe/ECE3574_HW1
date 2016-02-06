@@ -10,7 +10,7 @@ void BirthdayList::addBirthday(Birthday newBDay)
     Birthday* temp;
     temp = this->findByName(newBDay.getName());
     if(temp == nullptr) {
-        birthdays.append(newBDay);
+        m_birthdays.append(newBDay);
     }
     else {
         temp->setDate(newBDay.getDate());
@@ -19,16 +19,16 @@ void BirthdayList::addBirthday(Birthday newBDay)
 
 void BirthdayList::removeBirthday(Birthday bDay)
 {
-    birthdays.removeOne(bDay);
+    m_birthdays.removeOne(bDay);
 }
 
 QList<Birthday*> BirthdayList::findInRange(QDate startDate, int numDays)
 {
     QList<Birthday*> ret;
-    for(int i = 0; i < birthdays.size(); ++i) {
-        if(birthdays[i].getDate() >= startDate &&
-                birthdays[i].getDate() <= startDate.addDays(numDays)) {
-            ret.append(&birthdays[i]);
+    for(int i = 0; i < m_birthdays.size(); ++i) {
+        if(m_birthdays[i].getDate() >= startDate &&
+                m_birthdays[i].getDate() <= startDate.addDays(numDays)) {
+            ret.append(&m_birthdays[i]);
         }
     }
     return ret;
@@ -37,9 +37,9 @@ QList<Birthday*> BirthdayList::findInRange(QDate startDate, int numDays)
 QList<Birthday*> BirthdayList::searchNames(QString subString)
 {
     QList<Birthday*> ret;
-    for(int i = 0; i < birthdays.size(); ++i) {
-        if(birthdays[i].getName().indexOf(subString) >= 0) {
-            ret.append(&birthdays[i]);
+    for(int i = 0; i < m_birthdays.size(); ++i) {
+        if(m_birthdays[i].getName().indexOf(subString) >= 0) {
+            ret.append(&m_birthdays[i]);
         }
     }
     return ret;
@@ -47,9 +47,9 @@ QList<Birthday*> BirthdayList::searchNames(QString subString)
 
 Birthday* BirthdayList::findByName(QString name)
 {
-    for(int i = 0; i < birthdays.size(); ++i) {
-        if(birthdays[i].getName() == name) {
-            return &birthdays[i];
+    for(int i = 0; i < m_birthdays.size(); ++i) {
+        if(m_birthdays[i].getName() == name) {
+            return &m_birthdays[i];
         }
     }
     return nullptr;
@@ -58,9 +58,9 @@ Birthday* BirthdayList::findByName(QString name)
 void BirthdayList::refreshBirthdays()
 {
     QDate current = QDate::currentDate();
-    for(int i = 0; i < birthdays.size(); ++i) {
-        if(birthdays[i].getDate() < current) {
-            birthdays[i].setDate(birthdays[i].getDate().addYears(1));
+    for(int i = 0; i < m_birthdays.size(); ++i) {
+        if(m_birthdays[i].getDate() < current) {
+            m_birthdays[i].setDate(m_birthdays[i].getDate().addYears(1));
         }
     }
 }

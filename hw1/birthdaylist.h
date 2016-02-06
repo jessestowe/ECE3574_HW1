@@ -20,7 +20,7 @@ public:
     void readFromFile(QFile input);
     void dumpToFile(QFile output);
 private:
-    QList<Birthday> birthdays;
+    QList<Birthday> m_birthdays;
 
 };
 
