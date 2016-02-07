@@ -47,7 +47,15 @@ int main(int argc, char *argv[])
             printBirthdays(qtCout, birthdays.findInRange(QDate::currentDate(), atoi(argv[2])));
         }
         else if(strcmp(argv[1], "-d") == 0) {      //delete birthdays
-
+            if(argv[2][0] == '\"') {
+                birthdays.removeBirthday(*birthdays.findByName(QString(argv[2]).remove("\"")));
+            }
+            else {
+                QList<Birthday*> toDelete = birthdays.findInRange(QDate::fromString(argv[2], DATEFORMAT), 0);
+                for(int i = 0; i < toDelete.size(); ++ i) {
+                    birthdays.removeBirthday(*toDelete[i]);
+                }
+            }
         }
         else if(strcmp(argv[1], "-m") == 0) {      //birthdays after specified birthday and date range
 
@@ -60,12 +68,13 @@ int main(int argc, char *argv[])
         }
     }
     else {                                          //no command line args given, print default behaviour
+        printBirthdays(qtCout, birthdays.findInRange(QDate::currentDate(), 30));
 
     }
 
     // print out all birthdays
 //    for (int i = 0; i < birthdays.size(); ++i) {
-//        qtCout << birthdays.at(i).toLocal8Bit().constData() << endl;
+//        qtCout << birthdays[i].toLocal8Bit().constData() << endl;
 //    }
 
     dataFile.close();
@@ -77,7 +86,11 @@ int main(int argc, char *argv[])
 
 void printBirthdays(QTextStream& out, QList<Birthday*> birthdayList)
 {
-
+    //print header
+    out << "Name\tBirthday\n" << "====\t========\n";
+    for(int i = 0; i < birthdayList.size(); ++i) {
+        out << birthdayList[i]->getName() << "\t" << birthdayList[i]->getDate().toString(DATEFORMAT) << "\n";
+    }
 }
 
 
