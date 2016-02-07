@@ -13,6 +13,7 @@ public:
     QDate getDate() const;
     void setName(QString newName);
     void setDate(QDate newDate);
+    QString& print();
     bool operator==(const Birthday& b) const;
 private:
     QString name;

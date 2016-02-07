@@ -13,12 +13,13 @@ public:
     BirthdayList();
     void addBirthday(Birthday newBDay);
     void removeBirthday(Birthday bDay);
+    int size();
     QList<Birthday*> findInRange(QDate startDate, int numDays);
     QList<Birthday*> searchNames(QString subString);
     Birthday* findByName(QString name);
     void refreshBirthdays();
-    void readFromFile(QFile input);
-    void dumpToFile(QFile output);
+
+    Birthday& operator[] (const int nIndex);
 private:
     QList<Birthday> m_birthdays;
 

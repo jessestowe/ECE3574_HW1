@@ -22,6 +22,11 @@ void BirthdayList::removeBirthday(Birthday bDay)
     m_birthdays.removeOne(bDay);
 }
 
+int BirthdayList::size()
+{
+    return m_birthdays.size();
+}
+
 QList<Birthday*> BirthdayList::findInRange(QDate startDate, int numDays)
 {
     QList<Birthday*> ret;
@@ -59,8 +64,14 @@ void BirthdayList::refreshBirthdays()
 {
     QDate current = QDate::currentDate();
     for(int i = 0; i < m_birthdays.size(); ++i) {
-        if(m_birthdays[i].getDate() < current) {
-            m_birthdays[i].setDate(m_birthdays[i].getDate().addYears(1));
+        QDate oldBirthday = birthdays[i].getDate();
+        if(oldBirthday < current) {
+            m_birthdays[i].setDate(QDate(current.year(), oldBirthday.month(), oldBirthday.day()));
         }
     }
+}
+
+Birthday& BirthdayList::operator[] (const int nIndex)
+{
+    return m_birthdays[nIndex];
 }
