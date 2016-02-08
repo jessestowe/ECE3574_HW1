@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
 
         }
     }
-    catch (std::exception e)
+    catch (const std::exception& e)
     {
         qtCerr << e.what() << endl;
     }
