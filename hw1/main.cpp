@@ -219,11 +219,13 @@ bool isValidASCII(QString input)
     return ret;
 }
 
+//used with std::sort to sort birthdays by name
 static bool sortByName(const Birthday* b1, const Birthday* b2)
 {
     return b1->getName() < b2->getName();
 }
 
+//used with std::sort to sort birthdays by date
 static bool sortByDate(const Birthday* b1, const Birthday* b2)
 {
     return b1->getDate() < b2->getDate();
