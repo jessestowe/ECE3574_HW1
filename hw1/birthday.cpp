@@ -18,36 +18,36 @@ Birthday::Birthday()
 //creates a birthday with a name and date
 Birthday::Birthday(QString newName, QDate newDate)
 {
-    name = newName;
-    date = newDate;
+    m_name = newName;
+    m_date = newDate;
 }
 
 //returns the name of the birthday
 QString Birthday::getName() const
 {
-    return name;
+    return m_name;
 }
 
 //returns the date of the birthday
 QDate Birthday::getDate() const
 {
-    return date;
+    return m_date;
 }
 
 //sets the name for the birthday
 void Birthday::setName(QString newName)
 {
-    name = newName;
+    m_name = newName;
 }
 
 //sets the date for the birthday
 void Birthday::setDate(QDate newDate)
 {
-    date = newDate;
+    m_date = newDate;
 }
 
 //implements equality operation
 bool Birthday::operator ==(const Birthday& b) const
 {
-    return (this->name == b.name) && (this->date == b.date);
+    return (this->m_name == b.m_name) && (this->m_date == b.m_date);
 }

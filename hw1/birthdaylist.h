@@ -10,10 +10,10 @@
 #ifndef BIRTHDAYLIST_H
 #define BIRTHDAYLIST_H
 
-#include <QList>
-#include <QDate>
-#include <QString>
-#include <QFile>
+#include <QtCore/QList>
+#include <QtCore/QDate>
+#include <QtCore/QString>
+#include <QtCore/QFile>
 #include "birthday.h"
 
 class BirthdayList

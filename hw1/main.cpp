@@ -7,13 +7,13 @@
  * File: main file containing main function
  */
 
-#include <QCoreApplication>
-#include <QDate>
-#include <QFile>
-#include <QString>
-#include <QStringList>
-#include <QTextStream>
-#include <QList>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QDate>
+#include <QtCore/QFile>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
+#include <QtCore/QTextStream>
+#include <QtCore/QList>
 #include <exception>
 
 #include "birthday.h"
@@ -21,7 +21,6 @@
 
 #define DATAFILE "birthdays.dat"    //file to store birthday data
 #define DATEFORMAT Qt::ISODate      //date format for QDates
-
 
 //define functions
 void printBirthdays(QTextStream& out, QList<Birthday*> birthdayList);

@@ -10,8 +10,8 @@
 #ifndef BIRTHDAY_H
 #define BIRTHDAY_H
 
-#include <QDate>
-#include <QString>
+#include <QtCore/QDate>
+#include <QtCore/QString>
 
 class Birthday
 {
@@ -25,8 +25,8 @@ public:
     QString& print();
     bool operator==(const Birthday& b) const;
 private:
-    QString name;
-    QDate date;
+    QString m_name;
+    QDate m_date;
 };
 
 #endif // BIRTHDAY_H
