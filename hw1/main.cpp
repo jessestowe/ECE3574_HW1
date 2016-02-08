@@ -73,7 +73,11 @@ int main(int argc, char *argv[])
                     }
                 }
                 else {
-                    birthdays.removeBirthday(*birthdays.findByName(QString(argv[2])));
+                    Birthday* toRemove = &(*birthdays.findByName(QString(argv[2])));
+                    if(toRemove == nullptr) {
+                        throw std::invalid_argument("No birthdays found");
+                    }
+                    birthdays.removeBirthday(*toRemove);
                 }
 
             }
