@@ -50,6 +50,10 @@ int main(int argc, char *argv[])
     try {
         if(argc > 1) {
             if(strcmp(argv[1], "-a") == 0) {           //add birthday specified
+                QString name = QString(argv[3]);
+                if(!isValidASCII(name)) {
+                    throw std::invalid_argument("Invalid name");
+                }
                 QDate newDate = QDate::fromString(argv[2], DATEFORMAT);
                 if(newDate < QDate::currentDate() || !newDate.isValid()) {
                     throw std::invalid_argument("Invalid date");
