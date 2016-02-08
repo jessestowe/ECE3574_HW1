@@ -1,10 +1,22 @@
+/*
+ * Created by Jesse Stowe
+ * Student ID: 905*******
+ * email: sjesse@vt.edu
+ * class: ECE 3574
+ * Assignment: Homework 1
+ * File: class definition of birthdaylist
+*/
+
 #include "birthdaylist.h"
 
+//default constructor
 BirthdayList::BirthdayList()
 {
 
 }
 
+
+//adds a birthday to the list, updating birthday if same name is present
 void BirthdayList::addBirthday(Birthday newBDay)
 {
     Birthday* temp;
@@ -17,16 +29,19 @@ void BirthdayList::addBirthday(Birthday newBDay)
     }
 }
 
+//removes a birthday from the list
 void BirthdayList::removeBirthday(Birthday bDay)
 {
     m_birthdays.removeOne(bDay);
 }
 
+//returns the number of birthdays in the list
 int BirthdayList::size()
 {
     return m_birthdays.size();
 }
 
+//returns a list of birthdays in range from a given start date for numDays number of days
 QList<Birthday*> BirthdayList::findInRange(QDate startDate, int numDays)
 {
     QList<Birthday*> ret;
@@ -39,6 +54,7 @@ QList<Birthday*> BirthdayList::findInRange(QDate startDate, int numDays)
     return ret;
 }
 
+//searchs the list for all birthdays whose name's contain subString
 QList<Birthday*> BirthdayList::searchNames(QString subString)
 {
     QList<Birthday*> ret;
@@ -50,6 +66,8 @@ QList<Birthday*> BirthdayList::searchNames(QString subString)
     return ret;
 }
 
+//returns the birthday with the given name
+//if no match, returns nullptr
 Birthday* BirthdayList::findByName(QString name)
 {
     for(int i = 0; i < m_birthdays.size(); ++i) {
@@ -60,6 +78,8 @@ Birthday* BirthdayList::findByName(QString name)
     return nullptr;
 }
 
+//updates all birthdays so that they occur in the next year
+//except feb 29, which updates to be in the next 4 years
 void BirthdayList::refreshBirthdays()
 {
     QDate current = QDate::currentDate();
@@ -77,6 +97,7 @@ void BirthdayList::refreshBirthdays()
     }
 }
 
+//allows index style element access
 Birthday& BirthdayList::operator[] (const int nIndex)
 {
     return m_birthdays[nIndex];
