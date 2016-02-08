@@ -5,15 +5,16 @@
 #include <QStringList>
 #include <QTextStream>
 #include <QList>
+#include <exception>
+
 #include "birthday.h"
 #include "birthdaylist.h"
-
-#include <QDebug>
 
 #define DATAFILE "birthdays.dat"
 #define DATEFORMAT Qt::ISODate      //date format for QDates
 
 void printBirthdays(QTextStream& out, QList<Birthday*> birthdayList);
+bool isValidASCII(QString input);
 
 int main(int argc, char *argv[])
 {
@@ -46,41 +47,65 @@ int main(int argc, char *argv[])
     dataFile.close();
 
     //check for and handle command line args
-    if(argc > 1) {
-        if(strcmp(argv[1], "-a") == 0) {           //add birthday specified
-            birthdays.addBirthday(
-                Birthday(QString(argv[3]), QDate::fromString(argv[2], DATEFORMAT))
-            );
-        }
-        else if(strcmp(argv[1], "-n") == 0) {      //list birthdays coming up in n days
-            printBirthdays(qtCout, birthdays.findInRange(QDate::currentDate(), atoi(argv[2])));
-        }
-        else if(strcmp(argv[1], "-d") == 0) {      //delete birthdays
-            if(argv[2][0] > 48 && argv[2][0] < 57) { // if the arg starts with a decimal number
-                QList<Birthday*> toDelete = birthdays.findInRange(QDate::fromString(argv[2], DATEFORMAT), 0);
-                for(int i = 0; i < toDelete.size(); ++ i) {
-                    birthdays.removeBirthday(*toDelete[i]);
+    try {
+        if(argc > 1) {
+            if(strcmp(argv[1], "-a") == 0) {           //add birthday specified
+                QDate newDate = QDate::fromString(argv[2], DATEFORMAT);
+                if(newDate < QDate::currentDate() || !newDate.isValid()) {
+                    throw std::invalid_argument("Invalid date");
+                }
+                birthdays.addBirthday(
+                    Birthday(QString(argv[3]), newDate)
+                );
+            }
+            else if(strcmp(argv[1], "-n") == 0) {      //list birthdays coming up in n days
+                printBirthdays(qtCout, birthdays.findInRange(QDate::currentDate(), atoi(argv[2])));
+            }
+            else if(strcmp(argv[1], "-d") == 0) {      //delete birthdays
+                if(argv[2][0] > 48 && argv[2][0] < 57) { // if the arg starts with a decimal number
+                    QDate newDate = QDate::fromString(argv[2], DATEFORMAT);
+                    if(newDate < QDate::currentDate() || !newDate.isValid()) {
+                        throw std::invalid_argument("Invalid date");
+                    }
+                    QList<Birthday*> toDelete = birthdays.findInRange(newDate, 0);
+                    for(int i = 0; i < toDelete.size(); ++ i) {
+                        birthdays.removeBirthday(*toDelete[i]);
+                    }
+                }
+                else {
+                    birthdays.removeBirthday(*birthdays.findByName(QString(argv[2])));
+                }
+
+            }
+            else if(strcmp(argv[1], "-m") == 0) {      //birthdays after specified birthday and date range
+                Birthday* startBirthday = birthdays.findByName(argv[2]);
+                if(startBirthday == nullptr) {
+                    throw std::range_error("Name not found");
+                }
+                QDate date = startBirthday->getDate();
+                printBirthdays(qtCout, birthdays.findInRange(date, atoi(argv[3])));
+            }
+            else if(strcmp(argv[1], "-u") == 0) {      //update case
+                birthdays.refreshBirthdays();
+            }
+            else {                                      //namespec case
+                QString namespec = QString(argv[1]);
+                if(!isValidASCII(namespec)) {
+                    throw std::invalid_argument("Invalid name");
+                }
+                else {
+                    printBirthdays(qtCout, birthdays.searchNames(namespec));
                 }
             }
-            else {
-                birthdays.removeBirthday(*birthdays.findByName(QString(argv[2])));
-            }
-
         }
-        else if(strcmp(argv[1], "-m") == 0) {      //birthdays after specified birthday and date range
-            QDate date = birthdays.findByName(argv[2])->getDate();
-            printBirthdays(qtCout, birthdays.findInRange(date, atoi(argv[3])));
-        }
-        else if(strcmp(argv[1], "-u") == 0) {      //update case
-            birthdays.refreshBirthdays();
-        }
-        else {                                      //namespec case
+        else {                                          //no command line args given, print default behaviour
+            printBirthdays(qtCout, birthdays.findInRange(QDate::currentDate(), 30));
 
         }
     }
-    else {                                          //no command line args given, print default behaviour
-        printBirthdays(qtCout, birthdays.findInRange(QDate::currentDate(), 30));
-
+    catch (std::exception e)
+    {
+        qtCerr << e.what() << endl;
     }
 
     // write all birthdays back to file
@@ -94,7 +119,6 @@ int main(int argc, char *argv[])
         fileOut << birthdays[i].getDate().toString(DATEFORMAT) << " " << birthdays[i].getName() << "\n";
     }
 
-
     dataFile.close();
 
     //return a.exec();
@@ -104,11 +128,30 @@ int main(int argc, char *argv[])
 
 void printBirthdays(QTextStream& out, QList<Birthday*> birthdayList)
 {
-    //print header
-    out << "Name\t\t\tBirthday\n" << "=========\t\t============\n";
-    for(int i = 0; i < birthdayList.size(); ++i) {
-        out << birthdayList[i]->getName() << "\t\t" << birthdayList[i]->getDate().toString(DATEFORMAT) << "\n";
+    //check if no birthdays to print
+    if(birthdayList.size() != 0) {
+        out << "Name\t\t\tBirthday\n" << "=========\t\t============\n";
+        for(int i = 0; i < birthdayList.size(); ++i) {
+            out << birthdayList[i]->getName() << "\t\t" << birthdayList[i]->getDate().toString(DATEFORMAT) << "\n";
+        }
     }
+    else {
+        out << "No birthdays found\n";
+    }
+}
+
+
+//check if the input QString is valid ASCII (any printable char besides newline and tabs)
+bool isValidASCII(QString input)
+{
+    bool ret = true;
+    for(int i = 0; i < input.size(); ++i) {
+        if(input[i] < 32 || input[i] > 126) {
+            ret = false;
+            break;
+        }
+    }
+    return ret;
 }
 
 

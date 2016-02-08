@@ -64,9 +64,15 @@ void BirthdayList::refreshBirthdays()
 {
     QDate current = QDate::currentDate();
     for(int i = 0; i < m_birthdays.size(); ++i) {
-        QDate oldBirthday = birthdays[i].getDate();
-        if(oldBirthday < current) {
+        QDate oldBirthday = m_birthdays[i].getDate();
+        if(oldBirthday.dayOfYear() > current.dayOfYear()) {
             m_birthdays[i].setDate(QDate(current.year(), oldBirthday.month(), oldBirthday.day()));
+        }
+        else {
+            m_birthdays[i].setDate(QDate(current.year() + 1, oldBirthday.month(), oldBirthday.day()));
+        }
+        while(!m_birthdays[i].getDate().isValid()) {
+            m_birthdays[i].setDate(QDate(m_birthdays[i].year() + 1, m_birthdays[i].month(), m_birthdays[i].day()));
         }
     }
 }
