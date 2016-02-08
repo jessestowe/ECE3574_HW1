@@ -5,7 +5,7 @@
  * class: ECE 3574
  * Assignment: Homework 1
  * File: header file for birthdaylist
-*/
+ */
 
 #ifndef BIRTHDAYLIST_H
 #define BIRTHDAYLIST_H

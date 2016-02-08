@@ -5,7 +5,7 @@
  * class: ECE 3574
  * Assignment: Homework 1
  * File: main file containing main function
-*/
+ */
 
 #include <QCoreApplication>
 #include <QDate>
@@ -26,6 +26,8 @@
 //define functions
 void printBirthdays(QTextStream& out, QList<Birthday*> birthdayList);
 bool isValidASCII(QString input);
+static bool sortByName(const Birthday* b1, const Birthday* b2);
+static bool sortByDate(const Birthday* b1, const Birthday* b2);
 
 int main(int argc, char *argv[])
 {
@@ -82,7 +84,11 @@ int main(int argc, char *argv[])
             }
             else if(strcmp(argv[1], "-n") == 0) {      //list birthdays coming up in n days
                 //find and print birthdays in range of current date for argv[2] number of days
-                printBirthdays(qtCout, birthdays.findInRange(QDate::currentDate(), atoi(argv[2])));
+                QList<Birthday*> foundBirthdays = birthdays.findInRange(QDate::currentDate(), atoi(argv[2]));
+
+                //sort the birthdays by date
+                std::sort(foundBirthdays.begin(), foundBirthdays.end(), sortByDate);
+                printBirthdays(qtCout, foundBirthdays);
             }
             else if(strcmp(argv[1], "-d") == 0) {      //delete birthdays
                 if(argv[2][0] > 48 && argv[2][0] < 57) { // if the arg starts with a decimal number
@@ -120,8 +126,12 @@ int main(int argc, char *argv[])
                     throw std::range_error("Name not found");
                 }
                 QDate date = startBirthday->getDate();
+                QList<Birthday*> foundBirthdays = birthdays.findInRange(date, atoi(argv[3]));
+
+                //sort the birthdays by date
+                std::sort(foundBirthdays.begin(), foundBirthdays.end(), sortByDate);
                 //print out birthdays in range
-                printBirthdays(qtCout, birthdays.findInRange(date, atoi(argv[3])));
+                printBirthdays(qtCout, foundBirthdays);
             }
             else if(strcmp(argv[1], "-u") == 0) {      //update case
                 birthdays.refreshBirthdays();
@@ -134,7 +144,13 @@ int main(int argc, char *argv[])
                 }
                 else {
                     //if valid, print out birthdays matching namespec
-                    printBirthdays(qtCout, birthdays.searchNames(namespec));
+
+                    QList<Birthday*> foundBirthdays = birthdays.searchNames(namespec);
+
+                    //sort the birthdays by date
+                    std::sort(foundBirthdays.begin(), foundBirthdays.end(), sortByName);
+                    //print them out
+                    printBirthdays(qtCout, foundBirthdays);
                 }
             }
         }
@@ -201,6 +217,16 @@ bool isValidASCII(QString input)
         }
     }
     return ret;
+}
+
+static bool sortByName(const Birthday* b1, const Birthday* b2)
+{
+    return b1->getName() < b2->getName();
+}
+
+static bool sortByDate(const Birthday* b1, const Birthday* b2)
+{
+    return b1->getDate() < b2->getDate();
 }
 
 

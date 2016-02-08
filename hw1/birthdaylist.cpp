@@ -5,7 +5,7 @@
  * class: ECE 3574
  * Assignment: Homework 1
  * File: class definition of birthdaylist
-*/
+ */
 
 #include "birthdaylist.h"
 
