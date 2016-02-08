@@ -72,7 +72,7 @@ void BirthdayList::refreshBirthdays()
             m_birthdays[i].setDate(QDate(current.year() + 1, oldBirthday.month(), oldBirthday.day()));
         }
         while(!m_birthdays[i].getDate().isValid()) {
-            m_birthdays[i].setDate(QDate(m_birthdays[i].year() + 1, m_birthdays[i].month(), m_birthdays[i].day()));
+            m_birthdays[i].setDate(QDate(m_birthdays[i].getDate().year() + 1, m_birthdays[i].getDate().month(), m_birthdays[i].getDate().day()));
         }
     }
 }
