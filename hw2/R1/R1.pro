@@ -12,9 +12,11 @@ TEMPLATE = app
 SOURCES += main.cpp \
     film.cpp \
     educational.cpp \
-    entertainment.cpp
+    entertainment.cpp \
+    filmlist.cpp
 
 HEADERS += \
     film.h \
     educational.h \
-    entertainment.h
+    entertainment.h \
+    filmlist.h
