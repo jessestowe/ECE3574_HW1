@@ -9,6 +9,7 @@
 
 #include "libraryui.h"
 
+//define cout and cin here so they can be accessed from other UI classes
 QTextStream m_cout(stdout);
 QTextStream m_cin(stdin);
 
