@@ -9,11 +9,12 @@ CONFIG -= app_bundle
 
 TEMPLATE = app
 
-SOURCES += main.cpp \
+SOURCES += \
     film.cpp \
     educational.cpp \
     entertainment.cpp \
-    filmlist.cpp
+    filmlist.cpp \
+    filmListClient.cpp
 
 HEADERS += \
     film.h \

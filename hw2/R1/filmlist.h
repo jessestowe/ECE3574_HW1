@@ -1,3 +1,12 @@
+/*
+ * Created by Jesse Stowe
+ * Student ID: 905*******
+ * email: sjesse@vt.edu
+ * class: ECE 3574
+ * Assignment: Homework 2
+ * File: header file for FilmList, which derives from QList<Film*> and contains a list of films
+ */
+
 #ifndef FILMLIST_H
 #define FILMLIST_H
 
@@ -5,6 +14,8 @@
 #include <QStringList>
 #include <typeinfo>
 #include "film.h"
+#include "educational.h"
+#include "entertainment.h"
 
 class FilmList : public QList<Film*>
 {

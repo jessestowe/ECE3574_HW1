@@ -1,17 +1,32 @@
+/*
+ * Created by Jesse Stowe
+ * Student ID: 905*******
+ * email: sjesse@vt.edu
+ * class: ECE 3574
+ * Assignment: Homework 2
+ * File: class definition file for Educational derived class of Film
+ */
+
 #include "educational.h"
 
+//constructor for educational class with params
 Educational::Educational(QString id, QString title, QString dir, quint32 len, QDate relDate, QString subject, Grade grade) : Film(id, title, dir, len, relDate),
     m_Subject(subject), m_GradeLevel(grade)
 {
 
 }
-
-Educational::Educational(QStringList propList) : Film(propList),
-    m_Subject(propList.takeFirst()), m_GradeLevel(propList.takeFirst().toUInt())
+//constructor for educational class with a StringList as param
+Educational::Educational(QStringList& propList) : Film(propList),
+    m_Subject(propList.takeFirst())
 {
-
+    bool isValidGrade;
+    m_GradeLevel = propList.takeFirst().toUInt(&isValidGrade);
+    if(!isValidGrade) {
+        throw std::invalid_argument("invalid Grade");
+    }
 }
 
+//returns a QString with all of the information from the film with sepchar and labels if specified
 QString Educational::toString(bool labeled, QString sepchar) const
 {
     if(labeled) {
@@ -24,11 +39,13 @@ QString Educational::toString(bool labeled, QString sepchar) const
     }
 }
 
+//getter for subject
 QString Educational::getSubject()
 {
     return m_Subject;
 }
 
+//getter for grade level
 Grade Educational::getGradeLevel()
 {
     return m_GradeLevel;

@@ -1,3 +1,12 @@
+/*
+ * Created by Jesse Stowe
+ * Student ID: 905*******
+ * email: sjesse@vt.edu
+ * class: ECE 3574
+ * Assignment: Homework 2
+ * File: header file for film class which defines a film
+ */
+
 #ifndef FILM_H
 #define FILM_H
 
@@ -15,9 +24,8 @@ public:
     QString getDirector();
     quint32 getFilmLength();
     QDate getReleaseDate();
-protected:
     Film(QString id, QString title, QString dir, quint32 length, QDate relDate);
-    Film(QStringList propList);
+    Film(QStringList& propList);
 
 private:
     QString m_FilmID;

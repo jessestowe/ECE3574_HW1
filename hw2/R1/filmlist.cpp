@@ -1,26 +1,40 @@
+/*
+ * Created by Jesse Stowe
+ * Student ID: 905*******
+ * email: sjesse@vt.edu
+ * class: ECE 3574
+ * Assignment: Homework 2
+ * File: implementation of FilmList class with methods for finding, adding and removing films
+ */
+
 #include "filmlist.h"
 
+//default constructor
 FilmList::FilmList()
 {
 
 }
 
+//destructor
 FilmList::~FilmList()
 {
     qDeleteAll(*this);
     clear();
 }
 
+//copy constructor
 FilmList::FilmList(const FilmList &) : QList<Film*>()
 {
 
 }
 
+//assignment operator
 FilmList& FilmList::operator=(const FilmList&)
 {
     return *this;
 }
 
+//calls all of the contained films' toString methods and concatenates the output
 QString FilmList::toString()
 {
     QString ret;
@@ -30,10 +44,11 @@ QString FilmList::toString()
     return ret;
 }
 
+//adds a film to the list, checking for duplicates
 void FilmList::addFilm(Film *film)
 {
     Film* ref = findFilm(film->getID());
-    if(ref) {
+    if(!ref) {
         //check for film with same params
         for(int i = 0; i < size(); ++i) {
             Film* current = at(i);
@@ -56,6 +71,7 @@ void FilmList::addFilm(Film *film)
     }
 }
 
+//finds a film based on id, returns 0 if not found
 Film* FilmList::findFilm(QString id)
 {
     for(int i = 0; i < size(); ++i) {
@@ -66,6 +82,7 @@ Film* FilmList::findFilm(QString id)
     return 0;
 }
 
+//returns the ID's of contained films with the given title
 QStringList FilmList::getID(QString title)
 {
     QStringList ret;
@@ -77,6 +94,7 @@ QStringList FilmList::getID(QString title)
     return ret;
 }
 
+//removes a film from the list based on ID. Throws a range error if film not found
 void FilmList::removeFilm(QString filmID)
 {
     Film* ref = findFilm(filmID);
@@ -85,6 +103,6 @@ void FilmList::removeFilm(QString filmID)
         delete ref;
     }
     else {
-        throw std::range_error("Cannot find film to be deleted");
+        throw std::range_error("Cannot find film with given id");
     }
 }

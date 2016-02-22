@@ -1,5 +1,15 @@
+/*
+ * Created by Jesse Stowe
+ * Student ID: 905*******
+ * email: sjesse@vt.edu
+ * class: ECE 3574
+ * Assignment: Homework 2
+ * File: class definition file for Entertainment derived class of Film
+ */
+
 #include "entertainment.h"
 
+//constructor for Entertainment class with individual params
 Entertainment::Entertainment(QString id, QString title, QString dir, quint32 len,
                              QDate relDate, FilmTypes type, MPAARatings rtng) :
     Film(id, title, dir, len, relDate), m_Type(type), m_Rating(rtng)
@@ -7,8 +17,10 @@ Entertainment::Entertainment(QString id, QString title, QString dir, quint32 len
 
 }
 
-Entertainment::Entertainment(QStringList propList) : Film(propList)
+//constructor for Entertainment class with QStringList param
+Entertainment::Entertainment(QStringList& propList) : Film(propList)
 {
+    //convert string to enum for film type
     QString type = propList.takeFirst();
     if(type == "Action") {
             m_Type = Action;
@@ -26,8 +38,10 @@ Entertainment::Entertainment(QStringList propList) : Film(propList)
         m_Type = Romantic;
     }
     else {
+        //throw exception on invalid input
         throw std::invalid_argument("Invalid type");
     }
+    //convert string to enum for rating
     QString rating = propList.takeFirst();
     //{ G, PG, PG13, R };
     if(rating == "G") {
@@ -43,10 +57,12 @@ Entertainment::Entertainment(QStringList propList) : Film(propList)
         m_Rating = R;
     }
     else {
+        //throw exception on invalid input
         throw std::invalid_argument("Invalid rating");
     }
 }
 
+//returns a QString with all of the information from the film with sepchar and labels if specified
 QString Entertainment::toString(bool labeled, QString sepchar) const
 {
     if(labeled) {
@@ -59,11 +75,13 @@ QString Entertainment::toString(bool labeled, QString sepchar) const
     }
 }
 
+//getter for film type
 FilmTypes Entertainment::getFilmType()
 {
     return m_Type;
 }
 
+//getter for rating
 MPAARatings Entertainment::getRating()
 {
     return m_Rating;
