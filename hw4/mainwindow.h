@@ -5,8 +5,7 @@
 #include <QMainWindow>
 #include <QFile>
 #include <QStringList>
-
-#include <QtDebug>
+#include <QMessageBox>
 
 class MainWindow : public QSplitter
 {
@@ -26,6 +25,7 @@ public slots:
 
 signals:
     void appendText(QString newText);
+    void quitApp();
 
 private:
     QStringList* getFileArray(const QString& fileName);

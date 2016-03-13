@@ -33,6 +33,8 @@ int main(int argc, char *argv[])
 
     QObject::connect(&vsplitter, &MainWindow::appendText, &textEdit, &QTextEdit::append);
 
+    QObject::connect(&vsplitter, &MainWindow::quitApp, &a, &QApplication::quit);
+
     vsplitter.show();
 
     vsplitter.readFiles();

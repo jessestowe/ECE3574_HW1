@@ -36,7 +36,20 @@ void MainWindow::reminderHandler()
 
 void MainWindow::quitHandler()
 {
-
+    QMessageBox quitBox;
+    quitBox.setWindowTitle("Advisor");
+    quitBox.setText("Are you sure you want to quit?");
+    quitBox.setIcon(QMessageBox::Question);
+    quitBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    quitBox.setDefaultButton(QMessageBox::No);
+    int ret = quitBox.exec();
+    switch (ret) {
+        case QMessageBox::Yes :
+            emit this->quitApp();
+            break;
+        case QMessageBox::No :
+            break;
+    }
 }
 
 void MainWindow::readFiles()
