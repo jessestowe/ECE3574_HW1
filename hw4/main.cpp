@@ -35,5 +35,7 @@ int main(int argc, char *argv[])
 
     vsplitter.show();
 
+    vsplitter.readFiles();
+
     return a.exec();
 }

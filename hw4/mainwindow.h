@@ -16,6 +16,8 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    void readFiles();
+
 public slots:
     void adviceHandler();
     void weatherHandler();
@@ -28,6 +30,10 @@ signals:
 private:
     QStringList* getFileArray(const QString& fileName);
     QString getRandomString(const QStringList* list);
+
+    QStringList* adviceList;
+    QStringList* weatherList;
+    QStringList* reminderList;
 };
 
 #endif // MAINWINDOW_H
