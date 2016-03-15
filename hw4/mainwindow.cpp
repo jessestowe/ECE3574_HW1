@@ -1,5 +1,17 @@
+/*
+ * Created by Jesse Stowe
+ * Student ID: 905*******
+ * email: sjesse@vt.edu
+ * class: ECE 3574
+ * Assignment: Homework 4
+ * File: source file for MainWindow class that defines handlers for
+ *       the four required actions in the spec, and helper functions
+ */
+
 #include "mainwindow.h"
 
+
+//default constructor
 MainWindow::MainWindow(QWidget *parent)
     : QSplitter(parent)
 {
@@ -8,6 +20,8 @@ MainWindow::MainWindow(QWidget *parent)
     reminderList = NULL;
 }
 
+
+//destructor
 MainWindow::~MainWindow()
 {
     delete adviceList;
@@ -15,6 +29,7 @@ MainWindow::~MainWindow()
     delete reminderList;
 }
 
+//handler for giving advice
 void MainWindow::adviceHandler()
 {
     if(adviceList) {
@@ -29,6 +44,7 @@ void MainWindow::adviceHandler()
     }
 }
 
+//handler for giving weather
 void MainWindow::weatherHandler()
 {
     if(weatherList) {
@@ -43,6 +59,7 @@ void MainWindow::weatherHandler()
     }
 }
 
+//handler for giving reminders
 void MainWindow::reminderHandler()
 {
     if(reminderList) {
@@ -50,8 +67,16 @@ void MainWindow::reminderHandler()
             QString reminderText;
             int listIndex;
             reminderText = this->getRandomString(reminderList, listIndex);
-            QDateTime randomDate(QDate((qrand() % 100) + 1950, (qrand() % 12) + 1, (qrand() % 28) + 1), QTime(qrand() % 24, qrand() % 60, 0));
+
+            //create a random datetime object
+            QDateTime randomDate(QDate((qrand() % 100) + 1950, (qrand() % 12) + 1,
+                                       (qrand() % 28) + 1),
+                                 QTime(qrand() % 24, qrand() % 60, 0));
+
+            //append the date in the required format to the output text
             reminderText += " at " + randomDate.toString("h:mm A, dddd MM/dd/yyyy");
+
+            //create a message box with a checkbox
             QMessageBox reminderBox;
             QCheckBox* showAgain = new QCheckBox;
             showAgain->setChecked(true);
@@ -61,6 +86,7 @@ void MainWindow::reminderHandler()
             reminderBox.setText(reminderText);
             reminderBox.setCheckBox(showAgain);
             reminderBox.exec();
+            //remove printed string from list if checkbox was unchecked
             if(!reminderBox.checkBox()->isChecked()) {
                 reminderList->removeAt(listIndex);
             }
@@ -71,8 +97,10 @@ void MainWindow::reminderHandler()
     }
 }
 
+//handler for quit action
 void MainWindow::quitHandler()
 {
+    //create a yes/no dialog
     QMessageBox quitBox;
     quitBox.setWindowTitle("Advisor");
     quitBox.setText("Are you sure you want to quit?");
@@ -80,6 +108,8 @@ void MainWindow::quitHandler()
     quitBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     quitBox.setDefaultButton(QMessageBox::No);
     int ret = quitBox.exec();
+
+    //send quit signal if user said yes
     switch (ret) {
         case QMessageBox::Yes :
             emit this->quitApp();
@@ -89,6 +119,7 @@ void MainWindow::quitHandler()
     }
 }
 
+//read in the files and store them to their corrosponding lists
 void MainWindow::readFiles()
 {
     try {
@@ -111,7 +142,7 @@ void MainWindow::readFiles()
     }
 }
 
-
+//helper function for reading files and storing the lines in a QStringList
 QStringList* MainWindow::getFileArray(const QString& fileName)
 {
     QStringList* ret = new QStringList();
@@ -121,15 +152,16 @@ QStringList* MainWindow::getFileArray(const QString& fileName)
     }
 
     while (!file.atEnd()) {
-        QString line = file.readLine().trimmed();
+        QString line = file.readLine().trimmed(); //read line and remove newline character
         while(line.endsWith('\\')) {
             if(file.atEnd()) {
                 //throw exception
-                throw std::runtime_error("Backslash at end of last line of file " + fileName.toStdString());
+                throw std::runtime_error("Backslash at end of last line of file " +
+                                         fileName.toStdString());
             }
             else
             {
-                line.chop(1);
+                line.chop(1); //chop off the backslash
                 line += file.readLine().trimmed();
             }
         }
@@ -138,6 +170,7 @@ QStringList* MainWindow::getFileArray(const QString& fileName)
     return ret;
 }
 
+//helper function to get a random string from a string list
 QString MainWindow::getRandomString(const QStringList* list)
 {
     QString ret;
@@ -145,6 +178,8 @@ QString MainWindow::getRandomString(const QStringList* list)
     return ret;
 }
 
+//overloaded random string getter that also allows an int to be passed in which specifies
+//the randomly chosen index
 QString MainWindow::getRandomString(const QStringList* list, int &rand)
 {
     QString ret;
