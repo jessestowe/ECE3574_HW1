@@ -18,20 +18,57 @@ MainWindow::~MainWindow()
 void MainWindow::adviceHandler()
 {
     if(adviceList) {
-        emit this->appendText("Advice: " + this->getRandomString(adviceList));
+        QString advice;
+        if(!adviceList->empty()) {
+            advice = this->getRandomString(adviceList);
+        }
+        else {
+            advice = "";
+        }
+        emit this->appendText("Advice: " + advice);
     }
 }
 
 void MainWindow::weatherHandler()
 {
     if(weatherList) {
-        emit this->appendText("Weather: " + this->getRandomString(weatherList));
+        QString weather;
+        if(!weatherList->empty()) {
+            weather = this->getRandomString(weatherList);
+        }
+        else {
+            weather = "";
+        }
+        emit this->appendText("Weather: " + weather);
     }
 }
 
 void MainWindow::reminderHandler()
 {
-
+    if(reminderList) {
+        if(!reminderList->empty()) {
+            QString reminderText;
+            int listIndex;
+            reminderText = this->getRandomString(reminderList, listIndex);
+            QDateTime randomDate(QDate((qrand() % 100) + 1950, (qrand() % 12) + 1, (qrand() % 28) + 1), QTime(qrand() % 24, qrand() % 60, 0));
+            reminderText += " at " + randomDate.toString("h:mm A, dddd MM/dd/yyyy");
+            QMessageBox reminderBox;
+            QCheckBox* showAgain = new QCheckBox;
+            showAgain->setChecked(true);
+            showAgain->setText("Show this message again");
+            reminderBox.setIcon(QMessageBox::Information);
+            reminderBox.setWindowTitle(tr("Advisor"));
+            reminderBox.setText(reminderText);
+            reminderBox.setCheckBox(showAgain);
+            reminderBox.exec();
+            if(!reminderBox.checkBox()->isChecked()) {
+                reminderList->removeAt(listIndex);
+            }
+        }
+        else {
+            emit this->appendText("There are no more reminder messages");
+        }
+    }
 }
 
 void MainWindow::quitHandler()
@@ -88,7 +125,7 @@ QStringList* MainWindow::getFileArray(const QString& fileName)
         while(line.endsWith('\\')) {
             if(file.atEnd()) {
                 //throw exception
-                throw std::runtime_error("Backslash at end of last line of file");
+                throw std::runtime_error("Backslash at end of last line of file " + fileName.toStdString());
             }
             else
             {
@@ -105,5 +142,13 @@ QString MainWindow::getRandomString(const QStringList* list)
 {
     QString ret;
     ret = list->at(qrand() % list->length());
+    return ret;
+}
+
+QString MainWindow::getRandomString(const QStringList* list, int &rand)
+{
+    QString ret;
+    rand = qrand() % list->length();
+    ret = list->at(rand);
     return ret;
 }
