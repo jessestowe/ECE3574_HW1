@@ -1,5 +1,17 @@
+/*
+ * Created by Jesse Stowe
+ * Student ID: 905*******
+ * email: sjesse@vt.edu
+ * class: ECE 3574
+ * Assignment: Homework 5
+ * File: source file for Manager class that handles message sending
+ *       and receiving for each node
+ */
+
 #include "manager.h"
 
+
+// constructor
 Manager::Manager(const int instId, const char* boxName, const float temperature, mqd_t mailbox,
                  QList<const char*> upIds, QList<const char*> downIds) :
     m_IsOpen(false), m_Exit(false), m_InstId(instId), m_BoxName(boxName), m_ChildReceived(false),
@@ -8,12 +20,15 @@ Manager::Manager(const int instId, const char* boxName, const float temperature,
 
 }
 
+// starts the manager for node 0 by opening mailboxes and sending down a message
 void Manager::start()
 {
     this->openMailboxes();
     this->sendDown(m_InstId);
 }
 
+// blocking call that waits for messages to be received.
+// On receive, calculates a new internal temperature and passes on a new message
 void Manager::receiveTemp()
 {
     char buf[sizeof(float)+1];
@@ -43,6 +58,7 @@ void Manager::receiveTemp()
     }
 }
 
+// method for opening mailboxes with error checking
 void Manager::openMailboxes()
 {
     if(!m_IsOpen) {
@@ -68,6 +84,9 @@ void Manager::openMailboxes()
     }
 }
 
+// sends node's temp to all nodes in m_DownMQ with priority sendingNode
+// (uses queue priority to specify the sendingNode. This allows the receiving node
+// to know which node sent the message)
 void Manager::sendDown(int sendingNode)
 {
     char buf[sizeof(float)+1];
@@ -80,6 +99,9 @@ void Manager::sendDown(int sendingNode)
     }
 }
 
+// sends node's temp to all nodes in m_UpMQ with priority sendingNode
+// (uses queue priority to specify the sendingNode. This allows the receiving node
+// to know which node sent the message)
 void Manager::sendUp(int sendingNode)
 {
     std::cout << "Process #" << m_InstId << ": current temperature "
@@ -94,6 +116,9 @@ void Manager::sendUp(int sendingNode)
     }
 }
 
+// handles the processing of a new received message.
+// updates the internal temperature based on which node sent the message
+// and sends it's own temperature out to other nodes
 void Manager::processMessage(float message, unsigned int sendingNode)
 {
     // a "priority" of 8 is a special code to exit the program
@@ -147,6 +172,11 @@ void Manager::processMessage(float message, unsigned int sendingNode)
     }
 }
 
+// unpacks a float stored in a char array back into a float
+// use in conjunction with packFloat
+// example use:
+// char buf[4]; //buf contains a packed float
+// float n = unpackFloat(buf);
 float Manager::unpackFloat(const void *buf) {
     const unsigned char *b = (const unsigned char *)buf;
     uint32_t temp = 0;
@@ -157,6 +187,12 @@ float Manager::unpackFloat(const void *buf) {
     return *((float *) &temp);
 }
 
+// packs a floating point number into a 4 byte char array so it can be sent in a message
+// use in conjunction with unpackFloat
+// example use:
+// char buf[4];
+// float test = 3.5;
+// packFloat(buf, test); //test float is packed into buf
 void Manager::packFloat(void * buf, float x) {
     unsigned char *f = (unsigned char *)&x;
     unsigned char *b = (unsigned char *)buf;
@@ -166,6 +202,7 @@ void Manager::packFloat(void * buf, float x) {
     b[3] = f[3];
 }
 
+// safely exits the program by closing and unlinking the given mqueue
 void Manager::exit(int exitCode)
 {
     mq_close(m_Mailbox);

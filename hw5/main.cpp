@@ -1,3 +1,13 @@
+/*
+ * Created by Jesse Stowe
+ * Student ID: 905*******
+ * email: sjesse@vt.edu
+ * class: ECE 3574
+ * Assignment: Homework 5
+ * File: Main file for homework 5. Handles input checking and creating each mailbox.
+ *       Also creates and starts a manager object for the given node.
+ */
+
 #include <QList>
 #include <pthread.h>
 #include <mqueue.h>
@@ -51,6 +61,7 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
+    //create a list of all up nodes and down nodes that the current node should send to
     QList<const char*> upIds, downIds;
 
     switch(instId) {
@@ -84,13 +95,18 @@ int main(int argc, char *argv[])
                   break;
     }
 
+    //instantiate manager object
     Manager messageManager(instId, mqIds[instId], temperature, mqMailbox, upIds, downIds);
 
+    // if node 0, then start the execution
     if(instId == 0) {
         messageManager.start();
     }
+
+    // start waiting for messages to be received
     messageManager.receiveTemp();
 
+    // close and unlink the mailbox when done
     mq_close(mqMailbox);
     mq_unlink(mqIds[instId]);
 

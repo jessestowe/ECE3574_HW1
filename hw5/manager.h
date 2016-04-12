@@ -1,3 +1,13 @@
+/*
+ * Created by Jesse Stowe
+ * Student ID: 905*******
+ * email: sjesse@vt.edu
+ * class: ECE 3574
+ * Assignment: Homework 5
+ * File: header file for Manager class that handles message sending
+ *       and receiving for each node
+ */
+
 #ifndef MANAGER_H
 #define MANAGER_H
 
