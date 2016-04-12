@@ -5,7 +5,7 @@ CONFIG += c++11
 
 LIBS += -lrt
 
-TARGET = hw5
+TARGET = external
 CONFIG += console
 CONFIG -= app_bundle
 

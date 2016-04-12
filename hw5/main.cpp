@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     struct mq_attr attr;
     attr.mq_flags = O_NONBLOCK;
     attr.mq_maxmsg = 10;
-    attr.mq_msgsize = 15;
+    attr.mq_msgsize = 4;
     attr.mq_curmsgs = 0;
 
     // create message queue instance
@@ -84,27 +84,12 @@ int main(int argc, char *argv[])
                   break;
     }
 
-    Manager messageManager(instId, temperature, mqMailbox, upIds, downIds);
+    Manager messageManager(instId, mqIds[instId], temperature, mqMailbox, upIds, downIds);
 
     if(instId == 0) {
         messageManager.start();
     }
-
     messageManager.receiveTemp();
-
-//    while(1) {
-//        if(m_Exit) {
-//            break;
-//        }
-//        msg_length = mq_receive(m_Mailbox, &msg_buf[0], 100, 0);
-//        if(msg_length >= 0) {
-//            processMsg(msg_buf);
-//        }
-//        else if(errno != EAGAIN) {
-//            std::cout << "Error: " << strerror(errno) << std::endl;
-//            exit(-1);
-//        }
-//    }
 
     mq_close(mqMailbox);
     mq_unlink(mqIds[instId]);
