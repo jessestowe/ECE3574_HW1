@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     struct mq_attr attr;
     attr.mq_flags = O_NONBLOCK;
     attr.mq_maxmsg = 10;
-    attr.mq_msgsize = 4;
+    attr.mq_msgsize = 5;
     attr.mq_curmsgs = 0;
 
     // create message queue instance

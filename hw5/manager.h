@@ -34,7 +34,7 @@ private:
     QList<mqd_t> m_DownMQ;
 
     float unpackFloat(const void *buf);
-    int packFloat(void *buf, float x);
+    void packFloat(void * buf, float x);
 
     void processMessage(float message, unsigned int sendingNode);
 
